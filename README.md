@@ -14,3 +14,7 @@ SwissLV95Convert/
 ├── LICENSE
 └── .gitignore
 ```
+
+# Data
+## Buildings address with EGID
+https://www.housing-stat.ch/fr/madd/public.html#telecharger_les_donnees
