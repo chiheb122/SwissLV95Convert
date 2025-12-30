@@ -1,6 +1,8 @@
 ﻿using SwissLV95Convert.Core;
 using SwissLV95Convert.Cli.Services;
 using System;
+using System.IO;
+using System.Linq;
 
 // Console.WriteLine("test Swiss LV95 <-> WGS for this address Route d'Hermance 261. ==> long 6.220180365 lat 46.270537055");
 // var (lat2, lon2) = SwisstopoConverter.FromWgsToMN95(46.270537055, 6.220180365);
@@ -32,7 +34,10 @@ class Program
         Console.Write("Please past the path of the CSV File : ");
 
         var inputPath = Console.ReadLine();
-        var csvPath = inputPath.Trim().Trim('"');
+        // Trim both double and single quotes, then normalise to absolute path
+        var csvPath = inputPath?.Trim().Trim('"').Trim('\'');
+        if (csvPath != null)
+            csvPath = Path.GetFullPath(csvPath);
 
         Console.WriteLine($"Your choice : {mode} and the path : {csvPath}");
 
@@ -40,12 +45,21 @@ class Program
         {
            Console.WriteLine("Processing...");
            var csvService = new CsvService();
-           var data = csvService.ReadCsv(csvPath, separator: ';', skipHeader: true);
-           foreach (var row in data)
+           // Materialiser pour pouvoir le relire et éviter d'épuiser l'énumérable
+           var data = csvService.ReadCsv(csvPath, separator: ';', skipHeader: false).ToList();
+           if (data.Count > 0)
            {
-               Console.WriteLine(string.Join(", ", row));
-               break; // just to test reading
+               Console.WriteLine(string.Join(", ", data[0]));
            }
+           var outputDir = Path.GetDirectoryName(csvPath) ?? Environment.CurrentDirectory;
+           var outputPath = Path.GetFullPath(
+               Path.Combine(
+                   outputDir,
+                   $"output_converted_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+               )
+           );
+           csvService.ConvertAndAddToCsv(outputPath, data, 8, 9);
+           Console.WriteLine($"Conversion completed. Output saved to: {outputPath}");
         }
 
        }

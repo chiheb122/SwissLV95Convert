@@ -62,3 +62,6 @@ bin/
 obj/
 
 .vs/
+
+# Dstore files
+*.DS_Store
