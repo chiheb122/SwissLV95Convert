@@ -37,16 +37,15 @@ class CsvService
         reader.Close();
     }
 
-    public void ConvertAndAddToCsv(string outputPath, IEnumerable<string[]> data)
+// Column indexes (0-based) for LV95 coordinates in your dataset
+    public void ConvertAndAddToCsv(string outputPath, IEnumerable<string[]> data, int eastingIndex, int northingIndex)
     {
         // Ensure output directory exists
         var outDir = Path.GetDirectoryName(outputPath);
         if (!string.IsNullOrWhiteSpace(outDir))
             Directory.CreateDirectory(outDir);
 
-        // Column indexes (0-based) for LV95 coordinates in your dataset
-        int eastingIndex = 8;  // easting_lv95
-        int northingIndex = 9; // northing_lv95
+
 
         bool isFirstRow = true;
 
@@ -65,7 +64,7 @@ class CsvService
             }
             // if the row is not the header convert coord and add it
            var (latitude, longitude) = SwisstopoConverter.FromMN95ToWgs(
-                double.Parse(row[eastingIndex]),
+                double.Parse(row[eastingIndex]), 
                 double.Parse(row[northingIndex])
            );
             // Write the original row with new lat/lon columns
