@@ -37,16 +37,22 @@ class CsvService
         reader.Close();
     }
 
-// Column indexes (0-based) for LV95 coordinates in your dataset
+
+
+    /// <Summary>
+    /// Converts LV95 coordinates in the specified columns to WGS84 and appends them as new columns.
+    /// Column indexes (0-based) for LV95 coordinates in your dataset
+    /// eastingIndex: index of the easting (X) coordinate column
+    /// northingIndex: index of the northing (Y) coordinate column
+    /// </Summary>
     public void ConvertAndAddToCsv(string outputPath, IEnumerable<string[]> data, int eastingIndex, int northingIndex)
     {
-        // Ensure output directory exists
-        var outDir = Path.GetDirectoryName(outputPath);
-        if (!string.IsNullOrWhiteSpace(outDir))
-            Directory.CreateDirectory(outDir);
-
-
-
+        // clean the output path
+        outputPath = outputPath.Trim().Trim('"').Trim('\'');
+        // Ensure output directory exists and has correct permissions 
+        EnsureWritableDirectory(outputPath);
+        
+        // Flag to track the first row (header)
         bool isFirstRow = true;
 
         // Write to CSV
@@ -78,6 +84,32 @@ class CsvService
  
     }
 
+
+    /// <Summary>
+    /// Ensures that the directory for the given file path exists and is writable.
+    /// Throws an exception if the directory is not writable.
+    /// </Summary>
+    static void EnsureWritableDirectory(string filePath)
+    {
+        var dir = Path.GetDirectoryName(filePath);
+        if (string.IsNullOrWhiteSpace(dir))
+            return;
+
+        Directory.CreateDirectory(dir);
+
+        try
+        {
+            var testFile = Path.Combine(dir, Path.GetRandomFileName());
+            using (File.Create(testFile)) { }
+            File.Delete(testFile);
+        }
+        catch (Exception ex) when (
+            ex is UnauthorizedAccessException ||
+            ex is IOException)
+        {
+            throw new IOException($"Directory is not writable: {dir}", ex);
+        }
+    }
 
     
 
