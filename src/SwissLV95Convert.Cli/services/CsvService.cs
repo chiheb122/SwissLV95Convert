@@ -1,3 +1,7 @@
+using System.Data;
+using System.Linq;
+using SwissLV95Convert.Core;
+
 namespace SwissLV95Convert.Cli.Services;
 
 
@@ -29,10 +33,54 @@ class CsvService
 
             yield return line.Split(separator);
         }
+        // Close the reader
+        reader.Close();
     }
 
-    public void WriteCsv(string path, IEnumerable<string> data)
+    public void ConvertAndAddToCsv(string outputPath, IEnumerable<string[]> data)
     {
-        // Implementation for writing CSV
+        // Ensure output directory exists
+        var outDir = Path.GetDirectoryName(outputPath);
+        if (!string.IsNullOrWhiteSpace(outDir))
+            Directory.CreateDirectory(outDir);
+
+        // Column indexes (0-based) for LV95 coordinates in your dataset
+        int eastingIndex = 8;  // easting_lv95
+        int northingIndex = 9; // northing_lv95
+
+        bool isFirstRow = true;
+
+        // Write to CSV
+        using var writer = new StreamWriter(outputPath);
+        foreach (var row in data)
+        {
+           // add to the header the lon and lat atttribute
+           if (isFirstRow)
+            {
+                // Append header columns by creating a NEW sequence, then write it
+                var header = row.Concat(new[] { "Latitude", "Longitude" });
+                writer.WriteLine(string.Join(";", header));
+                isFirstRow = false;
+                continue;
+            }
+            // if the row is not the header convert coord and add it
+           var (latitude, longitude) = SwisstopoConverter.FromMN95ToWgs(
+                double.Parse(row[eastingIndex]),
+                double.Parse(row[northingIndex])
+           );
+            // Write the original row with new lat/lon columns
+            var newRow = row.Concat(new[] { latitude.ToString("F6"), longitude.ToString("F6") });
+            writer.WriteLine(string.Join(";", newRow));
+        }
+        // Close the writer 
+        writer.Flush();
+        writer.Close();
+
+ 
     }
+
+
+    
+
+
 }
