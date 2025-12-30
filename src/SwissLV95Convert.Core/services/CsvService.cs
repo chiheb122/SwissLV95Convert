@@ -44,7 +44,7 @@ public static class CsvService
     /// eastingIndex: index of the easting (X) coordinate column
     /// northingIndex: index of the northing (Y) coordinate column
     /// </Summary>
-    public static void ConvertAndAddToCsv(string outputPath, IEnumerable<string[]> data, int eastingIndex, int northingIndex)
+    public static void ConvertAndAddToCsv(string outputPath, IEnumerable<string[]> data, int eastingIndex, int northingIndex,string onlyLongLat = "n")
     {
         // clean the output path
         outputPath = outputPath.Trim().Trim('"').Trim('\'');
@@ -59,22 +59,40 @@ public static class CsvService
         foreach (var row in data)
         {
            // add to the header the lon and lat atttribute
-           if (isFirstRow)
+           if (isFirstRow && onlyLongLat.ToLower() != "y")
             {
                 // Append header columns by creating a NEW sequence, then write it
                 var header = row.Concat(new[] { "Latitude", "Longitude" });
                 writer.WriteLine(string.Join(";", header));
                 isFirstRow = false;
                 continue;
+            }else if (isFirstRow && onlyLongLat.ToLower() == "y"){
+                // Append header columns by creating a NEW sequence, then write it
+                var header = new[] { "Latitude", "Longitude" };
+                writer.WriteLine(string.Join(";", header));
+                isFirstRow = false;
+                continue;
             }
+
+
             // if the row is not the header convert coord and add it
            var (latitude, longitude) = SwisstopoConverter.FromMN95ToWgs(
                 double.Parse(row[eastingIndex]), 
                 double.Parse(row[northingIndex])
            );
+
+            // if only long/lat is chosen, write only these two columns
+
+            if (onlyLongLat.ToLower() == "y")
+            {
+                var newRowOnlyLatLon = new[] { latitude.ToString("F6"), longitude.ToString("F6") };
+                writer.WriteLine(string.Join(";", newRowOnlyLatLon));
+                continue;
+            }else{
             // Write the original row with new lat/lon columns
             var newRow = row.Concat(new[] { latitude.ToString("F6"), longitude.ToString("F6") });
             writer.WriteLine(string.Join(";", newRow));
+            }
         }
         // Close the writer 
         writer.Flush();

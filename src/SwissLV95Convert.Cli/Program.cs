@@ -28,7 +28,11 @@ class Program
        // Give the choice ligne and read it
         Console.Write("Mode (0/1/2): ");
         var mode = Console.ReadLine()?.Trim(); // read the number
-
+        if (mode == "0")
+        {
+            Console.WriteLine("Exiting the program.");
+            return;
+        }
         // Demander le path de fichier csv
         Console.Write("Please past the path of the CSV File : ");
 
@@ -38,17 +42,16 @@ class Program
         if (csvPath != null)
             csvPath = Path.GetFullPath(csvPath);
 
-        Console.WriteLine($"Your choice : {mode} and the path : {csvPath}");
+        Console.WriteLine($"Would you like to add data with the existing or only long/lat? (y/n): ");
+        var onlyLongLat = Console.ReadLine()?.Trim().ToLower() == "y" ? "y" : "n";
+
 
         if (csvPath != null)
         {
            Console.WriteLine("Processing...");
            // Materialiser pour pouvoir le relire et éviter d'épuiser l'énumérable
            var data = CsvService.ReadCsv(csvPath, separator: ';', skipHeader: false).ToList();
-           if (data.Count > 0)
-           {
-               Console.WriteLine(string.Join(", ", data[0]));
-           }
+
            var outputDir = Path.GetDirectoryName(csvPath) ?? Environment.CurrentDirectory;
            var outputPath = Path.GetFullPath(
                Path.Combine(
@@ -56,7 +59,15 @@ class Program
                    $"output_converted_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
                )
            );
-           CsvService.ConvertAndAddToCsv(outputPath, data, 8, 9);
+            // depending on the mode call the right conversion
+            if (mode == "2"){
+               Console.WriteLine("WGS84 to LV95 conversion is not yet implemented.");
+               return;
+            }
+            else if (mode == "1"){
+               CsvService.ConvertAndAddToCsv(outputPath, data, 8, 9, onlyLongLat);
+           }
+           // inform the user of the output path
            Console.WriteLine($"Conversion completed. Output saved to: {outputPath}");
         }
 
