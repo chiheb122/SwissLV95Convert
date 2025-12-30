@@ -32,6 +32,9 @@ class Program
         {
             Console.WriteLine("Exiting the program.");
             return;
+        } else if (mode != "1" && mode != "2"){
+            Console.WriteLine("Invalid mode selected. Please restart the program and choose a valid option.");
+            return;
         }
         // Demander le path de fichier csv
         Console.Write("Please past the path of the CSV File : ");
