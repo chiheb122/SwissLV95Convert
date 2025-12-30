@@ -1,5 +1,4 @@
-﻿using SwissLV95Convert.Core;
-using SwissLV95Convert.Cli.Services;
+﻿using SwissLV95Convert.Core.Services;
 using System;
 using System.IO;
 using System.Linq;
@@ -44,9 +43,8 @@ class Program
         if (csvPath != null)
         {
            Console.WriteLine("Processing...");
-           var csvService = new CsvService();
            // Materialiser pour pouvoir le relire et éviter d'épuiser l'énumérable
-           var data = csvService.ReadCsv(csvPath, separator: ';', skipHeader: false).ToList();
+           var data = CsvService.ReadCsv(csvPath, separator: ';', skipHeader: false).ToList();
            if (data.Count > 0)
            {
                Console.WriteLine(string.Join(", ", data[0]));
@@ -58,7 +56,7 @@ class Program
                    $"output_converted_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
                )
            );
-           csvService.ConvertAndAddToCsv(outputPath, data, 8, 9);
+           CsvService.ConvertAndAddToCsv(outputPath, data, 8, 9);
            Console.WriteLine($"Conversion completed. Output saved to: {outputPath}");
         }
 

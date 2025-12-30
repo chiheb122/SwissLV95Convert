@@ -1,13 +1,12 @@
 using System.Data;
 using System.Linq;
-using SwissLV95Convert.Core;
 
-namespace SwissLV95Convert.Cli.Services;
+namespace SwissLV95Convert.Core.Services;
 
 
-class CsvService
+public static class CsvService
 {
-    public IEnumerable<string[]> ReadCsv(string path, char separator = ',',bool skipHeader = true)
+    public static IEnumerable<string[]> ReadCsv(string path, char separator = ',',bool skipHeader = true)
     {
         // Nettoyage: l'utilisateur colle parfois '...' ou "..."
         path = path.Trim().Trim('"').Trim('\'');
@@ -45,7 +44,7 @@ class CsvService
     /// eastingIndex: index of the easting (X) coordinate column
     /// northingIndex: index of the northing (Y) coordinate column
     /// </Summary>
-    public void ConvertAndAddToCsv(string outputPath, IEnumerable<string[]> data, int eastingIndex, int northingIndex)
+    public static void ConvertAndAddToCsv(string outputPath, IEnumerable<string[]> data, int eastingIndex, int northingIndex)
     {
         // clean the output path
         outputPath = outputPath.Trim().Trim('"').Trim('\'');
