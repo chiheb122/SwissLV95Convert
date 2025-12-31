@@ -1,0 +1,173 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="300"
+
+        x:Class="SwissLV95Convert.Gui.MainWindow"
+        Title="SwissLV95Convert.Gui" Width="400"
+        Height="450" MinWidth="750" MinHeight="400">
+    
+
+    <!-- Styles -->
+    <Window.Styles>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#4F46E5"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="14,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#dbdbe9ff"/>
+        </Style>
+
+        <Style Selector="Button.primary:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#4338CA"/>
+        </Style>
+
+        <Style Selector="Button.primary:disabled /template/ ContentPresenter">
+            <Setter Property="Background" Value="#312E81"/>
+            <Setter Property="Opacity" Value="0.45"/>
+        </Style>
+
+
+        <Style Selector="Button.ghost">
+            <Setter Property="Background" Value="#7977a0ff"/>
+            <Setter Property="Foreground" Value="#f6f3f3ff"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="BorderBrush" Value="#c9cdd6ff"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        
+        <Style Selector="Button.ghost:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#dbdbe9ff"/>
+        </Style>
+
+        <Style Selector="Button.ghost:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#4338CA"/>
+        </Style>
+
+        <Style Selector="Button.ghost:disabled /template/ ContentPresenter">
+            <Setter Property="Background" Value="#312E81"/>
+            <Setter Property="Opacity" Value="0.45"/>
+        </Style>
+
+        <Style Selector="TextBlock.h1">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style Selector="TextBlock.muted">
+            <Setter Property="Foreground" Value="#9AA4B2"/>
+        </Style>
+
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="#0F172A"/>
+            <Setter Property="BorderBrush" Value="#1F2A44"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="16"/>
+        </Style>
+
+        <Style Selector="Border.dropzone">
+            <Setter Property="Background" Value="#0B1224"/>
+            <Setter Property="BorderBrush" Value="#27324A"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="18"/>
+        </Style>
+
+        <Style Selector="Border.cardButton">
+            <Setter Property="Background" Value="#302f31ff"/>
+            <Setter Property="BorderBrush" Value="#b5aeaeff"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="6"/>
+        </Style>
+
+        <!-- Dropzone hover while dragging a file -->
+        <Style Selector="Border.dropzone.dragover">
+            <Setter Property="BorderBrush" Value="#6366F1"/>
+            <Setter Property="Background" Value="#111B33"/>
+        </Style>
+
+    </Window.Styles>
+
+    <!-- Main layout grid -->
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+        <Border Margin="18,18,18,10" Classes="card">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Spacing="6">
+                    <TextBlock Classes="h1" Text="Swiss LV95 ↔ WGS84 Converter"/>
+                    <TextBlock Classes="muted"
+                                Text="Drag &amp; drop your .csv files here."/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+
+     
+
+        <Grid Grid.Row="1" Margin="18,0,5,18"
+            ColumnDefinitions="*,Auto"
+            RowDefinitions="Auto,Auto,*"
+            ColumnSpacing="14" RowSpacing="14">
+
+            <!-- Border pour File -->
+            <Border DragDrop.AllowDrop="True" Grid.Row="0" Grid.Column="0" Classes="dropzone" Name="DropZoneA"
+                    DragDrop.DragOver="DropZone_DragOver" DragDrop.Drop="DropA_Drop">
+                <StackPanel Spacing="10" Margin="12">
+                <TextBlock Foreground="White" FontWeight="SemiBold" Text="Csv File to Convert"/>
+                <TextBlock Classes="muted"
+                            Text="Drag &amp; drop a .csv here (or click Browse)"/>
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                    <TextBox Name="PathABox" Margin="0,6,8,0"/>
+                    <Button Classes="ghost" Grid.Column="1" Content="Browse" Click="BrowseA_Click"/>
+                </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Buttons -->
+            <Border Grid.Column="1" Classes="cardButton" Width="220">
+                <Grid Margin="2,2,2,2">
+
+                    <StackPanel Grid.Column="2" Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Button Classes="ghost" Content="Clear" Click="Clear_Click"/>
+                            <Button x:Name="StartButton" IsEnabled="False" Classes="primary" Content="Start comparison" Click="Start_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+
+            <Border Grid.Row="2" Grid.ColumnSpan="2" Classes="card">
+                <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto">
+                    <!-- Summary and Result Hint -->
+                    <StackPanel Spacing="4" Margin="8">
+                            <TextBlock Name="SummaryText" Foreground="#9AA4B2" Text=""/>
+                            <TextBlock Name="ResultHint" Foreground="#9AA4B2" Text="No File selected yet. Please select a csv file."/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Loading Card (fixé en bas de la zone centrale) -->
+            <Border Grid.Row="2" Grid.ColumnSpan="2"
+                    Classes="muted"
+                    Name="LoadingCard"
+                    IsVisible="False"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Stretch"
+                    Margin="12"
+                    >
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ProgressBar IsIndeterminate="True" Height="10" Width="220" CornerRadius="10"/>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+    </Grid>
+</Window>
