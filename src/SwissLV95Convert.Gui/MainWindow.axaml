@@ -2,11 +2,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="300"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="500"
 
         x:Class="SwissLV95Convert.Gui.MainWindow"
         Title="SwissLV95Convert.Gui" Width="400"
-        Height="450" MinWidth="750" MinHeight="400">
+        Height="500" MinWidth="750" MinHeight="500">
     
 
     <!-- Styles -->
@@ -83,8 +83,8 @@
         </Style>
 
         <Style Selector="Border.cardButton">
-            <Setter Property="Background" Value="#302f31ff"/>
-            <Setter Property="BorderBrush" Value="#b5aeaeff"/>
+            <Setter Property="Background" Value="#5f2a2a62"/>
+            <Setter Property="BorderBrush" Value="#f8efefff"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="CornerRadius" Value="16"/>
             <Setter Property="Padding" Value="6"/>
@@ -102,10 +102,11 @@
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
         <Border Margin="18,18,18,10" Classes="card">
             <Grid ColumnDefinitions="*,Auto">
-                <StackPanel Spacing="6">
-                    <TextBlock Classes="h1" Text="Swiss LV95 ↔ WGS84 Converter"/>
-                    <TextBlock Classes="muted"
-                                Text="Drag &amp; drop your .csv files here."/>
+                <StackPanel Spacing="6" Orientation="Horizontal">
+                    <!-- Swiss flag icon -->
+                    <PathIcon Height="50" Width="50" Foreground="#D52B1E" Data="{StaticResource swiss_flag_cross}"/>
+                    <!-- Title -->
+                    <TextBlock VerticalAlignment="Center" Classes="h1" Text="Swiss LV95 Converter"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -119,7 +120,7 @@
             ColumnSpacing="14" RowSpacing="14">
 
             <!-- Border pour File -->
-            <Border DragDrop.AllowDrop="True" Grid.Row="0" Grid.Column="0" Classes="dropzone" Name="DropZoneA"
+            <Border DragDrop.AllowDrop="True" Grid.Row="0" Grid.Column="0" Classes="dropzone" Name="DropZoneA" Height="180"
                     DragDrop.DragOver="DropZone_DragOver" DragDrop.Drop="DropA_Drop">
                 <StackPanel Spacing="10" Margin="12">
                 <TextBlock Foreground="White" FontWeight="SemiBold" Text="Csv File to Convert"/>
@@ -133,14 +134,19 @@
             </Border>
 
             <!-- Buttons -->
-            <Border Grid.Column="1" Classes="cardButton" Width="220">
-                <Grid Margin="2,2,2,2">
+            <Border Grid.Column="1" Classes="cardButton" Width="220" Padding="14">
+                <StackPanel Spacing="12" HorizontalAlignment="Stretch">
+                    <!-- Section title -->
+                    <TextBlock Text="Export options" FontWeight="SemiBold" FontSize="14" Opacity="0.85"/>
 
-                    <StackPanel Grid.Column="2" Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Button Classes="ghost" Content="Clear" Click="Clear_Click"/>
-                            <Button x:Name="StartButton" IsEnabled="False" Classes="primary" Content="Start comparison" Click="Start_Click"/>
-                    </StackPanel>
-                </Grid>
+                    <!-- Checkboxes -->
+                    <CheckBox Content="Only latitude / longitude in new file" Classes="modernCheck"/>
+                    <CheckBox Content="Keep existing columns" IsChecked="True" Classes="modernCheck"/>
+
+                    <!-- Actions -->
+                    <Button Classes="ghost" Content="Clear" HorizontalAlignment="Center" Click="Clear_Click"/>
+                    <Button x:Name="StartButton" Classes="primary" Content="Start conversion" HorizontalAlignment="Center" IsEnabled="False" Click="Start_Click"/>
+                </StackPanel>
             </Border>
 
 
@@ -149,7 +155,7 @@
                     <!-- Summary and Result Hint -->
                     <StackPanel Spacing="4" Margin="8">
                             <TextBlock Name="SummaryText" Foreground="#9AA4B2" Text=""/>
-                            <TextBlock Name="ResultHint" Foreground="#9AA4B2" Text="No File selected yet. Please select a csv file."/>
+                            <TextBlock Name="ResultHint"  FontWeight="Bold" Foreground="#9AA4B2" Text="No File selected yet. Please select a csv file."/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -169,5 +175,11 @@
             </Border>
 
         </Grid>
+
     </Grid>
+
+    <Window.Resources>
+        <StreamGeometry x:Key="swiss_flag_cross">M9 3H15 V9 H21 V15 H15 V21 H9 V15 H3 V9 H9 Z</StreamGeometry>
+    </Window.Resources>
 </Window>
+
