@@ -8,6 +8,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Remote.Protocol.Designer;
+using SwissLV95Convert.Core.Services;
 
 namespace SwissLV95Convert.Gui;
 
@@ -120,7 +121,16 @@ public partial class MainWindow : Window
                 // exécuter le travail lourd en arrière-plan
                 await Task.Run(() =>
                 {
-                    // ... travail de conversion / I/O ...
+                    var data = CsvService.ReadCsv(_pathA, separator: ';', skipHeader: false).ToList();
+                    Console.WriteLine($"Debug: CSV file read successfully.{data.Count} rows found.");
+                    var outputDir = Path.GetDirectoryName(_pathA) ?? Environment.CurrentDirectory;
+                    Console.WriteLine($"Debug: Output directory determined as {outputDir}.");
+                    var outputPath = Path.GetFullPath(
+                        Path.Combine(
+                            outputDir,
+                            $"output_converted_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+                        ));
+                    Console.WriteLine($"Debug: Output path set to {outputPath}.");
                 });
 
                 if (ResultHint is not null) ResultHint.Text = "Done.";
@@ -152,6 +162,21 @@ public partial class MainWindow : Window
             else
                 border.Classes.Remove("dragover");
         }
+
+        // CheckBoxes Update status
+        private void ExclusiveChoiceChanged(object? sender, RoutedEventArgs e)
+        {
+            if (sender == OnlyLatLonCheckBox && OnlyLatLonCheckBox.IsChecked == true)
+            {
+                KeepExistingColumnsCheckBox.IsChecked = false;
+            }
+            else if (sender == KeepExistingColumnsCheckBox && KeepExistingColumnsCheckBox.IsChecked == true)
+            {
+                OnlyLatLonCheckBox.IsChecked = false;
+            }
+        }
+
+
 
 
 

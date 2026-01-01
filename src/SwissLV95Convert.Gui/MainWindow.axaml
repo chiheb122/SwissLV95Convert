@@ -140,8 +140,8 @@
                     <TextBlock Text="Export options" FontWeight="SemiBold" FontSize="14" Opacity="0.85"/>
 
                     <!-- Checkboxes -->
-                    <CheckBox Content="Only latitude / longitude in new file" Classes="modernCheck"/>
-                    <CheckBox Content="Keep existing columns" IsChecked="True" Classes="modernCheck"/>
+                    <CheckBox x:Name="OnlyLatLonCheckBox" Content="Only latitude / longitude in new file" Checked="ExclusiveChoiceChanged" Unchecked="ExclusiveChoiceChanged" Classes="modernCheck"/>
+                    <CheckBox x:Name="KeepExistingColumnsCheckBox" Checked="ExclusiveChoiceChanged" Unchecked="ExclusiveChoiceChanged" Content="Keep existing columns" IsChecked="True" Classes="modernCheck"/>
 
                     <!-- Actions -->
                     <Button Classes="ghost" Content="Clear" HorizontalAlignment="Center" Click="Clear_Click"/>
