@@ -114,7 +114,8 @@ public partial class MainWindow : Window
             {
                 if (LoadingCard is not null) LoadingCard.IsVisible = true;
                 if (ResultHint is not null) ResultHint.Text = "Please wait...";
-
+                // determine options
+                var onlyLongLat = OnlyLatLonCheckBox?.IsChecked == true ? "y" : "n";
                 // petit délai pour laisser l'UI se mettre à jour avant de lancer le travail
                 await Task.Delay(5000);
 
@@ -130,6 +131,7 @@ public partial class MainWindow : Window
                             outputDir,
                             $"output_converted_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
                         ));
+                    CsvService.ConvertAndAddToCsv(outputPath, data, 8, 9, onlyLongLat);
                     Console.WriteLine($"Debug: Output path set to {outputPath}.");
                 });
 
