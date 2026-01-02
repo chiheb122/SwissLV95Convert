@@ -2,11 +2,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="500"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="600"
 
         x:Class="SwissLV95Convert.Gui.MainWindow"
         Title="SwissLV95Convert.Gui" Width="400"
-        Height="500" MinWidth="750" MinHeight="500">
+        Height="600" MinWidth="750" MinHeight="500">
     
 
     <!-- Styles -->
@@ -136,12 +136,19 @@
             <!-- Buttons -->
             <Border Grid.Column="1" Classes="cardButton" Width="220" Padding="14">
                 <StackPanel Spacing="12" HorizontalAlignment="Stretch">
+                    <!-- Column numbers -->
+                    <TextBlock Text="Column numbers" FontWeight="SemiBold" FontSize="14" Opacity="0.85"/>
+                    <Grid ColumnDefinitions="80,Auto" ColumnSpacing="14" Margin="0,2,0,0">
+                        <TextBox x:Name="EastingTextBox" Grid.Column="0" Width="80" Watermark="Easting" TextChanged="NumericTextBox_TextChanged" />
+                        <TextBox x:Name="NorthingTextBox" Grid.Column="1" Width="80" Watermark="Northing" TextChanged="NumericTextBox_TextChanged" />
+                    </Grid>
+
                     <!-- Section title -->
                     <TextBlock Text="Export options" FontWeight="SemiBold" FontSize="14" Opacity="0.85"/>
 
                     <!-- Checkboxes -->
-                    <CheckBox x:Name="OnlyLatLonCheckBox" Content="Only latitude / longitude in new file" Checked="ExclusiveChoiceChanged" Unchecked="ExclusiveChoiceChanged" Classes="modernCheck"/>
-                    <CheckBox x:Name="KeepExistingColumnsCheckBox" Checked="ExclusiveChoiceChanged" Unchecked="ExclusiveChoiceChanged" Content="Keep existing columns" IsChecked="True" Classes="modernCheck"/>
+                    <CheckBox x:Name="OnlyLatLonCheckBox" Content="Only latitude / longitude" Checked="ExclusiveChoiceChanged" Unchecked="ExclusiveChoiceChanged" Classes="modernCheck"/>
+                    <CheckBox x:Name="KeepExistingColumnsCheckBox" Checked="ExclusiveChoiceChanged" Unchecked="ExclusiveChoiceChanged" Content="With existing columns" IsChecked="True" Classes="modernCheck"/>
 
                     <!-- Actions -->
                     <Button Classes="ghost" Content="Clear" HorizontalAlignment="Center" Click="Clear_Click"/>

@@ -114,6 +114,13 @@ public partial class MainWindow : Window
             {
                 if (LoadingCard is not null) LoadingCard.IsVisible = true;
                 if (ResultHint is not null) ResultHint.Text = "Please wait...";
+
+                // check and get column numbers
+                if (EastingTextBox is null || NorthingTextBox is null)
+                {
+                    if (ResultHint is not null) ResultHint.Text = "Internal error: Column input boxes not found.";
+                    return;
+                }
                 // determine options
                 var onlyLongLat = OnlyLatLonCheckBox?.IsChecked == true ? "y" : "n";
                 // petit délai pour laisser l'UI se mettre à jour avant de lancer le travail
@@ -177,6 +184,32 @@ public partial class MainWindow : Window
                 OnlyLatLonCheckBox.IsChecked = false;
             }
         }
+
+        // Allow only numeric input from keyboard
+        private void NumericTextBox_PreviewTextInput(object? sender, TextInputEventArgs e)
+        {
+                var text = e.Text ?? string.Empty;   // avoid null
+                e.Handled = !text.All(char.IsDigit);
+        }
+
+        // Block non-numeric clipboard paste
+        private void NumericTextBox_TextChanged(object? sender, TextChangedEventArgs e)
+        {
+            // Handle paste or any programmatic changes: keep only digits
+            if (sender is not TextBox tb)
+                return;
+
+            var text = tb.Text ?? "";
+            var digitsOnly = new string(text.Where(char.IsDigit).ToArray());
+
+            if (digitsOnly != text)
+            {
+                var caret = tb.CaretIndex;
+                tb.Text = digitsOnly;
+                tb.CaretIndex = Math.Min(caret, digitsOnly.Length);
+            }
+        }
+
 
 
 
