@@ -54,6 +54,15 @@ public partial class MainWindow : Window
             if (string.IsNullOrWhiteSpace(localPath))
                 return;
 
+            // n'accepter que .csv
+            if (!string.Equals(Path.GetExtension(localPath), ".csv", StringComparison.OrdinalIgnoreCase))
+            {
+                ResultHint?.SetCurrentValue(TextBlock.TextProperty, "Only .csv files are allowed.");
+                // optionnel: afficher un dialogue
+                _ = DialogService.ShowInfoAsync(this, "Invalid file", "Please drop a .csv file.");
+                return;
+            }
+
             SetPath(isA, localPath);
         }
         // Browse Button Handlers
@@ -65,7 +74,16 @@ public partial class MainWindow : Window
             var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
                 Title = "Select a .csv file",
-                AllowMultiple = false
+                AllowMultiple = false,
+                FileTypeFilter = new[]
+                {
+                    new FilePickerFileType("CSV")
+                    {
+                        Patterns = new[] { "*.csv" },
+                        // Optional mime types:
+                        // MimeTypes = new[] { "text/csv", "application/csv" }
+                    }
+                }
             });
 
             var file = files.FirstOrDefault();
@@ -77,6 +95,14 @@ public partial class MainWindow : Window
         // Set Path and Update UI
         private void SetPath(bool isA, string path)
         {
+            // vérification d'extension ici aussi pour les appels directs
+            if (!string.Equals(Path.GetExtension(path), ".csv", StringComparison.OrdinalIgnoreCase))
+            {
+                ResultHint?.SetCurrentValue(TextBlock.TextProperty, "Only .csv files are allowed.");
+                _ = DialogService.ShowInfoAsync(this, "Invalid file", "Please select a .csv file.");
+                return;
+            }
+
             if (isA)
             {
                 _pathA = path;
