@@ -1,0 +1,35 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="SwissLV95Convert.Gui.views.MessageDialog"
+        Width="420"
+        CanResize="False"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource ThemeBackgroundBrush}">
+
+  <Border Padding="18" CornerRadius="12" Classes="card">
+    <StackPanel Spacing="14">
+      
+      <!-- Title -->
+      <TextBlock x:Name="TitleText"
+                 FontSize="16"
+                 FontWeight="SemiBold"/>
+
+      <!-- Message -->
+      <TextBlock x:Name="MessageText"
+                 Opacity="0.9"
+                 TextWrapping="Wrap"/>
+
+      <!-- Actions -->
+      <StackPanel Orientation="Horizontal"
+                  HorizontalAlignment="Right"
+                  Spacing="10">
+        <Button x:Name="OkButton"
+                Classes="primary"
+                Width="90"
+                Content="OK"
+                Click="OkButton_Click"/>
+      </StackPanel>
+    </StackPanel>
+  </Border>
+</Window>

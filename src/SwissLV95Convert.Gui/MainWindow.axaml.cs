@@ -9,6 +9,8 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Remote.Protocol.Designer;
 using SwissLV95Convert.Core.Services;
+using SwissLV95Convert.Gui.Services;
+using Avalonia.Animation;
 
 namespace SwissLV95Convert.Gui;
 
@@ -20,8 +22,8 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         // Ensure the Start button exists and the handler is hooked (fallback if XAML wiring fails)
-        if (StartButton != null)
-            StartButton.Click += Start_Click;
+        // if (StartButton != null)
+        //     StartButton.Click += Start_Click;
         UpdateStartButtonState();
     }
 
@@ -116,9 +118,12 @@ public partial class MainWindow : Window
                 if (ResultHint is not null) ResultHint.Text = "Please wait...";
 
                 // check and get column numbers
-                if (EastingTextBox is null || NorthingTextBox is null)
+                if (EastingTextBox.Text is null || NorthingTextBox.Text is null)
                 {
-                    if (ResultHint is not null) ResultHint.Text = "Internal error: Column input boxes not found.";
+                    if (ResultHint is not null) ResultHint.Text = "Internal error: Column numbers text boxes are null.";
+                    await DialogService.ShowInfoAsync(this,
+                        "Missing column numbers",
+                        "Please enter both column numbers (Easting and Northing) before starting the conversion.");
                     return;
                 }
                 // determine options
@@ -138,11 +143,17 @@ public partial class MainWindow : Window
                             outputDir,
                             $"output_converted_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
                         ));
-                    CsvService.ConvertAndAddToCsv(outputPath, data, 8, 9, onlyLongLat);
+                    CsvService.ConvertAndAddToCsv(outputPath, data, int.Parse(EastingTextBox.Text), int.Parse(NorthingTextBox.Text), onlyLongLat);
                     Console.WriteLine($"Debug: Output path set to {outputPath}.");
                 });
 
                 if (ResultHint is not null) ResultHint.Text = "Done.";
+            }catch (Exception ex)
+            {
+                if (ResultHint is not null) ResultHint.Text = "An error occurred during conversion.";
+                await DialogService.ShowInfoAsync(this,
+                    "Conversion Error",
+                    $"An error occurred during the conversion process:\n{ex.Message}");
             }
             finally
             {
