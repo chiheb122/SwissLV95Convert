@@ -1,6 +1,6 @@
 using System;
 
-namespace SwissLV95Convert.Core;
+namespace SwissLV95Convert.Core.Services;
 
 /// <summary>
 /// Convert GPS (WGS84) to Swiss (LV95 / MN95) coordinates - and vice versa.

@@ -3,7 +3,9 @@ using System.Linq;
 
 namespace SwissLV95Convert.Core.Services;
 
-
+/// <summary>
+/// Service for handling CSV file operations.
+/// </summary>
 public static class CsvService
 {
     public static IEnumerable<string[]> ReadCsv(string path, char separator = ',',bool skipHeader = true)
