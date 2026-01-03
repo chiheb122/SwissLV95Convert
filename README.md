@@ -10,6 +10,18 @@ Convert Swiss LV95 (CH1903+) coordinates to WGS84 from CSV files. Includes a CLI
 ## Screenshot
 ![GUI Preview](img/darkScreen.png)
 
+## Why you need it
+
+Many Swiss public datasets and geospatial services use the Swiss LV95 (CH1903+) coordinate system. LV95 uses projected coordinates (eastings/northings) that are not directly compatible with global geographic coordinate systems such as WGS84 (latitude/longitude) used by web maps (MapLibre, Google Maps, Leaflet, etc.). This project provides a simple, precise converter so you can:
+
+- Transform CSV datasets from LV95 to WGS84 for visualization on global basemaps.
+- Integrate Swiss government data into web maps, GIS tools, or data pipelines without manual reprojection.
+- Keep numeric precision and handle CSV column layouts commonly found in exported datasets.
+
+Provided CLI and GUI interfaces make the conversion easy.
+
+Official Swisstopo documentation: https://www.swisstopo.admin.ch/en/the-swiss-coordinates-system
+
 ## Project structure
 ```
 SwissLV95Convert/
@@ -27,10 +39,10 @@ SwissLV95Convert/
 ```
 
 ## Features
-- LV95 (MN95) ↔ WGS84 conversion
+- LV95 (MN95) -> WGS84 conversion
 - CSV input/output
 - CLI for scripting and batch processing
-- Cross-platform GUI (Avalonia) — under development
+- Cross-platform GUI (Avalonia) for better ans simple experience
 
 ## Quick start
 
@@ -44,7 +56,7 @@ dotnet build
 ```bash
 cd src/SwissLV95Convert.Cli
 dotnet run -- <mode> <path-to-file.csv>
-# mode: 1 = LV95 → WGS84, 2 = WGS84 → LV95
+# mode: 1 = LV95 → WGS84
 ```
 
 3. GUI (development):
