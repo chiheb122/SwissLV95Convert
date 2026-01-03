@@ -55,7 +55,8 @@ dotnet build
 2. CLI example:
 ```bash
 cd src/SwissLV95Convert.Cli
-dotnet run -- <mode> <path-to-file.csv>
+dotnet build
+dotnet run 
 # mode: 1 = LV95 → WGS84
 ```
 
