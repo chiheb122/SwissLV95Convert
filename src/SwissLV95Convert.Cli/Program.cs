@@ -3,12 +3,11 @@ using System;
 using System.IO;
 using System.Linq;
 
-// Console.WriteLine("test Swiss LV95 <-> WGS for this address Route d'Hermance 261. ==> long 6.220180365 lat 46.270537055");
-// var (lat2, lon2) = SwisstopoConverter.FromWgsToMN95(46.270537055, 6.220180365);
-// Console.WriteLine($"{lat2}, {lon2}");
-// var (e2, n2) = SwisstopoConverter.FromMN95ToWgs(2506071.293, 1125076.987);
-// Console.WriteLine($"{e2}, {n2}");
+namespace SwissLV95Convert.Cli;
 
+/// <summary>
+/// Main program class for Swiss LV95 to WGS84 conversion CLI.
+/// </summary>
 class Program
 {
     static void Main(string[] args)
@@ -21,18 +20,17 @@ class Program
             -----------------------------------------------------
             Choose a mode:
             1) LV95 → WGS84
-            2) WGS84 → LV95
             0) Exit
             """);
        
        // Give the choice ligne and read it
-        Console.Write("Mode (0/1/2): ");
+        Console.Write("Mode (0/1): ");
         var mode = Console.ReadLine()?.Trim(); // read the number
         if (mode == "0")
         {
             Console.WriteLine("Exiting the program.");
             return;
-        } else if (mode != "1" && mode != "2"){
+        } else if (mode != "1"){
             Console.WriteLine("Invalid mode selected. Please restart the program and choose a valid option.");
             return;
         }
@@ -62,12 +60,7 @@ class Program
                    $"output_converted_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
                )
            );
-            // depending on the mode call the right conversion
-            if (mode == "2"){
-               Console.WriteLine("WGS84 to LV95 conversion is not yet implemented.");
-               return;
-            }
-            else if (mode == "1"){
+            if (mode == "1"){
                CsvService.ConvertAndAddToCsv(outputPath, data, 8, 9, onlyLongLat);
            }
            // inform the user of the output path
