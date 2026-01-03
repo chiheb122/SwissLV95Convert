@@ -49,7 +49,6 @@ class Program
 
         if (csvPath != null)
         {
-           Console.WriteLine("Processing...");
            // Materialiser pour pouvoir le relire et éviter d'épuiser l'énumérable
            var data = CsvService.ReadCsv(csvPath, separator: ';', skipHeader: false).ToList();
 
@@ -68,6 +67,8 @@ class Program
                     Console.WriteLine("Please enter the column index for Northing (Y) values (starting from 0): ");
                     var yIndexInput = Console.ReadLine();
                     int yIndex = int.Parse(yIndexInput ?? throw new FormatException("Invalid input for Y index."));
+                   
+                    Console.WriteLine("Processing...");
                     // Call the conversion service
                     CsvService.ConvertAndAddToCsv(outputPath, data, xIndex, yIndex, onlyLongLat);
                 }
