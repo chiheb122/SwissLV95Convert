@@ -1,0 +1,45 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="220" fill="#f43f2fff"/>
+
+  <!-- Switzerland map (stylized silhouette) -->
+  <path d="
+    M250 420
+    L310 360
+    L390 370
+    L430 330
+    L520 350
+    L610 320
+    L690 360
+    L750 420
+    L720 480
+    L760 540
+    L710 610
+    L630 650
+    L590 720
+    L500 740
+    L440 700
+    L380 710
+    L340 660
+    L280 620
+    L300 560
+    L260 500
+    Z"
+    fill="#CBD5E1"/>
+
+  <!-- Location pin -->
+  <path d="
+    M512 360
+    C452 360 410 404 410 458
+    C410 540 512 664 512 664
+    C512 664 614 540 614 458
+    C614 404 572 360 512 360
+    Z"
+    fill="#2563EB"/>
+
+  <!-- Pin center -->
+  <circle cx="512" cy="458" r="36" fill="white"/>
+
+</svg>
