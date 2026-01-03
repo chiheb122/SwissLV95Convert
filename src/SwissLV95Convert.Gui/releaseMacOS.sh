@@ -19,5 +19,7 @@ mkdir "$APP_NAME/Contents/MacOS"
 mkdir "$APP_NAME/Contents/Resources"
 
 cp "$INFO_PLIST" "$APP_NAME/Contents/Info.plist"
-cp "$ICON_FILE" "$APP_NAME/Contents/Resources/$ICON_FILE"
+cp "$ICON_FILE" "$APP_NAME/Contents/Resources/"
+mv "$APP_NAME/Contents/MacOS/SwissLV95Convert.Gui" "$APP_NAME/Contents/MacOS/SwissLV95Convert"
+chmod +x "$APP_NAME/Contents/MacOS/SwissLV95Convert" 
 cp -a "$PUBLISH_OUTPUT_DIRECTORY" "$APP_NAME/Contents/MacOS"
