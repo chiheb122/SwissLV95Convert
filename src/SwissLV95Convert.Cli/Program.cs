@@ -61,7 +61,24 @@ class Program
                )
            );
             if (mode == "1"){
-               CsvService.ConvertAndAddToCsv(outputPath, data, 8, 9, onlyLongLat);
+                try{
+                    Console.WriteLine("Please enter the column index for Easting (X) values (starting from 0): ");
+                    var xIndexInput = Console.ReadLine();
+                    int xIndex = int.Parse(xIndexInput ?? throw new FormatException("Invalid input for X index."));
+                    Console.WriteLine("Please enter the column index for Northing (Y) values (starting from 0): ");
+                    var yIndexInput = Console.ReadLine();
+                    int yIndex = int.Parse(yIndexInput ?? throw new FormatException("Invalid input for Y index."));
+                    // Call the conversion service
+                    CsvService.ConvertAndAddToCsv(outputPath, data, xIndex, yIndex, onlyLongLat);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error during conversion: {ex.Message}");
+                    return;
+                }
+
+                
+            
            }
            // inform the user of the output path
            Console.WriteLine($"Conversion completed. Output saved to: {outputPath}");
