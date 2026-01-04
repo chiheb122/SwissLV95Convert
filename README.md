@@ -1,14 +1,19 @@
 # SwissLV95Convert
-
 [![Status](https://img.shields.io/badge/status-under_development-orange?style=flat-square)](https://github.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-net9.0-512bd4?style=flat-square)](https://dotnet.microsoft.com/)
 [![Issues](https://img.shields.io/badge/issues-welcome-brightgreen?style=flat-square)](https://github.com/)
 
+![Icon](docs/img/icon.svg)
+
 Convert Swiss LV95 (CH1903+) coordinates to WGS84 from CSV files. Includes a CLI for batch use and a work-in-progress Avalonia GUI.
 
 ## Screenshot
-![GUI Preview](img/darkScreen.png)
+![GUI Preview](docs/img/darkScreen.png)
+
+## 🎥 Demo
+<video src="docs/vd/demo.mov" controls width="800"></video>
+
 
 ## Why you need it
 

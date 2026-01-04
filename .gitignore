@@ -65,3 +65,6 @@ obj/
 
 # Dstore files
 *.DS_Store
+
+
+docs/vd/*.mov
