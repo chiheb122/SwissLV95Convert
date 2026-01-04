@@ -125,7 +125,7 @@ public partial class MainWindow : Window
 
         private async void Start_Click(object? sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_pathA) )
+            if (string.IsNullOrWhiteSpace(_pathA))
             {
                 if (ResultHint is not null) ResultHint.Text = "Please select a file to start conversion.";
                 return;
@@ -137,44 +137,45 @@ public partial class MainWindow : Window
                 return;
             }
 
-
             try
             {
                 if (LoadingCard is not null) LoadingCard.IsVisible = true;
                 if (ResultHint is not null) ResultHint.Text = "Please wait...";
 
-                // check and get column numbers
-                if (EastingTextBox.Text is null || NorthingTextBox.Text is null)
+                // read and validate UI values on UI thread BEFORE starting background work
+                var eastingText = EastingTextBox?.Text ?? "";
+                var northingText = NorthingTextBox?.Text ?? "";
+                if (!int.TryParse(eastingText, out var eastingIndex) || !int.TryParse(northingText, out var northingIndex))
                 {
-                    if (ResultHint is not null) ResultHint.Text = "Internal error: Column numbers text boxes are null.";
+                    if (ResultHint is not null) ResultHint.Text = "Column numbers must be integers.";
                     await DialogService.ShowInfoAsync(this,
-                        "Missing column numbers",
-                        "Please enter both column numbers (Easting and Northing) before starting the conversion.");
+                        "Invalid column numbers",
+                        "Please enter valid integer column numbers for Easting and Northing.");
                     return;
                 }
-                // determine options
-                var onlyLongLat = OnlyLatLonCheckBox?.IsChecked == true ? "y" : "n";
-                // petit délai pour laisser l'UI se mettre à jour avant de lancer le travail
-                await Task.Delay(5000);
 
-                // exécuter le travail lourd en arrière-plan
+                var onlyLongLat = OnlyLatLonCheckBox?.IsChecked == true ? "y" : "n";
+                var pathCopy = _pathA; // capture path
+
+                // short delay to allow UI to render the loading state
+                await Task.Delay(50);
+
+                // background work uses only local copies (no UI access)
                 await Task.Run(() =>
                 {
-                    var data = CsvService.ReadCsv(_pathA, separator: ';', skipHeader: false).ToList();
-                    Console.WriteLine($"Debug: CSV file read successfully.{data.Count} rows found.");
-                    var outputDir = Path.GetDirectoryName(_pathA) ?? Environment.CurrentDirectory;
-                    Console.WriteLine($"Debug: Output directory determined as {outputDir}.");
+                    var data = CsvService.ReadCsv(pathCopy, separator: ';', skipHeader: false).ToList();
+                    var outputDir = Path.GetDirectoryName(pathCopy) ?? Environment.CurrentDirectory;
                     var outputPath = Path.GetFullPath(
                         Path.Combine(
                             outputDir,
                             $"output_converted_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
                         ));
-                    CsvService.ConvertAndAddToCsv(outputPath, data, int.Parse(EastingTextBox.Text), int.Parse(NorthingTextBox.Text), onlyLongLat);
-                    Console.WriteLine($"Debug: Output path set to {outputPath}.");
+                    CsvService.ConvertAndAddToCsv(outputPath, data, eastingIndex, northingIndex, onlyLongLat);
                 });
 
                 if (ResultHint is not null) ResultHint.Text = "Done.";
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 if (ResultHint is not null) ResultHint.Text = "An error occurred during conversion.";
                 await DialogService.ShowInfoAsync(this,
