@@ -4,7 +4,10 @@
 [![.NET](https://img.shields.io/badge/.NET-net9.0-512bd4?style=flat-square)](https://dotnet.microsoft.com/)
 [![Issues](https://img.shields.io/badge/issues-welcome-brightgreen?style=flat-square)](https://github.com/)
 
-![Icon](docs/img/icon.svg)
+<p align="center">
+  <img src="docs/img/icon.svg" alt="SwissLV95Convert Icon" width="96">
+</p>
+
 
 Convert Swiss LV95 (CH1903+) coordinates to WGS84 from CSV files. Includes a CLI for batch use and a work-in-progress Avalonia GUI.
 
