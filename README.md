@@ -15,7 +15,9 @@ Convert Swiss LV95 (CH1903+) coordinates to WGS84 from CSV files. Includes a CLI
 ![GUI Preview](docs/img/darkScreen.png)
 
 ## 🎥 Demo
-<video src="docs/vd/demo.mov" controls width="800"></video>
+![Demo](docs/vd/demo.gif)
+
+
 
 https://github.com/chiheb122/SwissLV95Convert/blob/main/docs/vd/demo.mov
 ## Why you need it
